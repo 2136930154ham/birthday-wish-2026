@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f3ec">
+  <meta name="description" content="一份为你准备的生日祝福">
+  <title>生日快乐 · 给你的一份祝福</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f8f3ec;
+      --ink: #23363a;
+      --coral: #d95d55;
+      --coral-dark: #b94440;
+      --green: #56867b;
+      --line: #d9d3c9;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--paper); }
+    body {
+      margin: 0;
+      min-width: 280px;
+      min-height: 100svh;
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      overflow-x: hidden;
+    }
+    button { font: inherit; }
+    #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+    .page {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(100%, 760px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(26px, env(safe-area-inset-top)) 24px max(30px, env(safe-area-inset-bottom));
+      text-align: center;
+      isolation: isolate;
+    }
+    .page::before, .page::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 70px;
+      height: 70px;
+      border: 1px solid var(--line);
+      transform: rotate(18deg);
+      opacity: .75;
+    }
+    .page::before { top: 90px; left: 14px; }
+    .page::after { right: 14px; bottom: 145px; transform: rotate(-16deg); }
+    .topline {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--green);
+      font-family: Georgia, serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      white-space: nowrap;
+    }
+    .topline::before, .topline::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+    .intro { margin: clamp(28px, 6vh, 62px) 0 0; color: var(--green); font-size: 14px; letter-spacing: .2em; }
+    h1 {
+      margin: 12px 0 0;
+      font-family: "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
+      font-size: clamp(46px, 10vw, 76px);
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.2;
+      color: var(--coral);
+    }
+    .subtitle { margin: 14px 0 0; font-size: 15px; line-height: 1.8; color: #556361; }
+    .art {
+      position: relative;
+      flex: 0 0 auto;
+      width: min(100%, 380px);
+      height: clamp(260px, 35vh, 310px);
+      margin: 13px auto 0;
+      user-select: none;
+    }
+    .art::before {
+      content: "";
+      position: absolute;
+      left: 50%; bottom: 24px;
+      width: 88%; height: 1px;
+      transform: translateX(-50%);
+      background: var(--line);
+    }
+    .sparkle { position: absolute; color: var(--green); font-family: Georgia, serif; line-height: 1; animation: twinkle 3s ease-in-out infinite; }
+    .sparkle.a { top: 29%; left: 8%; font-size: 27px; }
+    .sparkle.b { top: 18%; right: 9%; font-size: 20px; animation-delay: 1s; color: var(--coral); }
+    .sparkle.c { top: 59%; right: 4%; font-size: 14px; animation-delay: .5s; }
+    .plate {
+      position: absolute; left: 50%; bottom: 30px;
+      width: 76%; height: 20px; transform: translateX(-50%);
+      border-radius: 50%; background: #ddd6ca;
+      box-shadow: 0 11px 0 -6px #b8c3b9;
+    }
+    .cake-base {
+      position: absolute; left: 50%; bottom: 43px;
+      width: 62%; height: 94px; transform: translateX(-50%);
+      border-radius: 8px 8px 14px 14px;
+      background: repeating-linear-gradient(to bottom, #e8aa8f 0 28px, #f4cbb2 28px 32px, #e8aa8f 32px 60px);
+      box-shadow: inset -20px 0 0 #dc997f, 0 6px 0 #a66561;
+    }
+    .cake-base::before, .cake-upper::before {
+      content: ""; position: absolute; z-index: 2; left: -3%; top: -8px;
+      width: 106%; height: 27px; border-radius: 50% / 55%;
+      background: #fff5e8; box-shadow: 0 5px 0 #f1e4d4;
+    }
+    .cake-base::after {
+      content: ""; position: absolute; z-index: 2; left: 10%; top: 13px;
+      width: 12px; height: 19px; border-radius: 0 0 9px 9px;
+      background: #fff5e8;
+      box-shadow: 43px 6px 0 3px #fff5e8, 90px -2px 0 -1px #fff5e8, 143px 4px 0 2px #fff5e8;
+    }
+    .cake-upper {
+      position: absolute; left: 50%; bottom: 127px;
+      width: 42%; height: 67px; transform: translateX(-50%);
+      border-radius: 7px 7px 9px 9px;
+      background: #e9ac92;
+      box-shadow: inset -16px 0 0 #dc997f;
+    }
+    .cake-upper::after {
+      content: ""; position: absolute; z-index: 2; left: 16%; top: 14px;
+      width: 10px; height: 16px; border-radius: 0 0 8px 8px;
+      background: #fff5e8; box-shadow: 37px 4px 0 2px #fff5e8, 79px -1px 0 #fff5e8;
+    }
+    .candles { position: absolute; left: 50%; bottom: 188px; width: 112px; height: 63px; transform: translateX(-50%); }
+    .candle {
+      position: absolute; bottom: 0; width: 9px; height: 37px;
+      border-radius: 3px 3px 1px 1px;
+      background: repeating-linear-gradient(135deg, #fff3dc 0 6px, #78a99a 6px 10px);
+    }
+    .candle:nth-child(1) { left: 19px; height: 31px; }
+    .candle:nth-child(2) { left: 52px; height: 39px; }
+    .candle:nth-child(3) { left: 85px; height: 33px; }
+    .flame {
+      position: absolute; left: 50%; bottom: calc(100% + 5px);
+      width: 13px; height: 19px; transform: translateX(-50%) rotate(8deg);
+      border-radius: 75% 5% 70% 45%;
+      background: #f6a539;
+      box-shadow: 0 0 12px 4px #f6d47b88;
+      animation: flicker 1.2s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+      transition: opacity .45s ease, scale .45s ease;
+    }
+    .candle:nth-child(2) .flame { animation-delay: -.4s; }
+    .candle:nth-child(3) .flame { animation-delay: -.7s; }
+    .blown .flame { opacity: 0; scale: .2; animation: none; }
+    .message {
+      width: min(100%, 500px);
+      margin: 6px 0 0;
+      font-size: 15px;
+      line-height: 1.95;
+      color: #435553;
+    }
+    .reveal {
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height .8s ease, opacity .7s ease, margin .7s ease;
+    }
+    .reveal.show { max-height: 280px; opacity: 1; margin-top: 12px; }
+    .reveal p { margin: 0; }
+    .signature { margin-top: 14px !important; color: var(--coral-dark); font-family: "Songti SC", "SimSun", serif; font-size: 17px; }
+    .action {
+      flex: 0 0 auto;
+      min-width: 190px; min-height: 52px;
+      margin: 26px 0 0; padding: 12px 28px;
+      border: 0; border-radius: 4px;
+      background: var(--coral); color: #fff;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 5px 0 var(--coral-dark);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .action:hover { background: #c9514b; }
+    .action:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--coral-dark); }
+    .action:focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }
+    .footer { margin: auto 0 0; padding-top: 28px; color: #828c87; font-family: Georgia, serif; font-size: 11px; letter-spacing: .12em; }
+    @keyframes flicker { from { transform: translateX(-50%) rotate(-8deg) scale(.93); } to { transform: translateX(-50%) rotate(10deg) scale(1.05); } }
+    @keyframes twinkle { 50% { opacity: .35; transform: scale(.75); } }
+    @media (max-height: 680px) {
+      .intro { margin-top: 20px; }
+      .art { height: 250px; margin-top: 0; }
+      .cake-base { bottom: 32px; }
+      .cake-upper { bottom: 116px; }
+      .candles { bottom: 177px; }
+      .plate { bottom: 19px; }
+      .art::before { bottom: 13px; }
+      .action { margin-top: 18px; }
+    }
+    @media (max-width: 360px) {
+      .page { padding-left: 18px; padding-right: 18px; }
+      .cake-base::after { box-shadow: 36px 6px 0 3px #fff5e8, 75px -2px 0 -1px #fff5e8, 114px 4px 0 2px #fff5e8; }
+      .cake-upper::after { box-shadow: 32px 4px 0 2px #fff5e8, 64px -1px 0 #fff5e8; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <main class="page">
+    <div class="topline">A LITTLE CELEBRATION</div>
+    <p class="intro">致 <span id="recipient">今天最特别的你</span></p>
+    <h1>生日快乐</h1>
+    <p class="subtitle">愿你今天的快乐，比蜡烛的光还要明亮。</p>
+
+    <div class="art" role="img" aria-label="点着三根蜡烛的双层生日蛋糕">
+      <span class="sparkle a">✳</span><span class="sparkle b">✦</span><span class="sparkle c">✳</span>
+      <div class="plate"></div>
+      <div class="cake-base"></div>
+      <div class="cake-upper"></div>
+      <div class="candles" id="candles">
+        <div class="candle"><span class="flame"></span></div>
+        <div class="candle"><span class="flame"></span></div>
+        <div class="candle"><span class="flame"></span></div>
+      </div>
+    </div>
+
+    <div class="message">
+      <div class="reveal" id="wish" aria-live="polite">
+        <p>愿新的一岁，平安喜乐常伴，<br>喜欢的事情都有回响。<br>愿你继续自在地发光，<br>也一直被生活温柔以待。</p>
+        <p class="signature">生日快乐！<span id="sender"></span></p>
+      </div>
+    </div>
+    <button class="action" id="action" type="button">许个愿，吹蜡烛</button>
+    <p class="footer">MADE FOR YOUR SPECIAL DAY</p>
+  </main>
+  <script>
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const recipient = (params.get('to') || '').trim().slice(0, 24);
+      const sender = (params.get('from') || '').trim().slice(0, 24);
+      if (recipient) document.getElementById('recipient').textContent = recipient;
+      if (sender) document.getElementById('sender').textContent = ` · 来自 ${sender}`;
+
+      const button = document.getElementById('action');
+      const candles = document.getElementById('candles');
+      const wish = document.getElementById('wish');
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let particles = [];
+      let frame = 0;
+      let running = false;
+      let revealed = false;
+
+      function resize() {
+        const ratio = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = innerWidth * ratio;
+        canvas.height = innerHeight * ratio;
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+      addEventListener('resize', resize, { passive: true });
+      resize();
+
+      function celebrate() {
+        if (reducedMotion) return;
+        const colors = ['#d95d55', '#56867b', '#efc265', '#e8aa8f', '#6a8995'];
+        particles = Array.from({ length: 110 }, () => ({
+          x: Math.random() * innerWidth,
+          y: -30 - Math.random() * innerHeight * .55,
+          vx: (Math.random() - .5) * 2.5,
+          vy: 2 + Math.random() * 3.5,
+          size: 4 + Math.random() * 6,
+          angle: Math.random() * 6,
+          spin: (Math.random() - .5) * .16,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        }));
+        frame = 0;
+        if (!running) { running = true; requestAnimationFrame(draw); }
+      }
+      function draw() {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        for (const p of particles) {
+          p.x += p.vx + Math.sin(frame * .03 + p.angle) * .45;
+          p.y += p.vy;
+          p.angle += p.spin;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * .55);
+          ctx.restore();
+        }
+        frame++;
+        if (frame < 240 && particles.some(p => p.y < innerHeight + 20)) {
+          requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, innerWidth, innerHeight);
+          running = false;
+        }
+      }
+      button.addEventListener('click', () => {
+        if (!revealed) {
+          candles.classList.add('blown');
+          wish.classList.add('show');
+          button.textContent = '再看一次烟花';
+          revealed = true;
+        }
+        celebrate();
+      });
+    })();
+  </script>
+</body>
+</html>
